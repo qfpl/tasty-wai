@@ -35,7 +35,7 @@ main = defaultMain $ testGroup "Tasty-Wai Tests"
 
   [ testWai testApp "Hello to World" $ do
       res <- get "hello"
-      assertBody "wrld!" res
+      assertBody "world!" res
 
   , testWai testApp "Echo to thee" $ do
       res <- post "echo" "thus"

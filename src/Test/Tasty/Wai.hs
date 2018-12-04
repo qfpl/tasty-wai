@@ -98,14 +98,22 @@ buildRequestWithBody mth rpath =
 testWai :: Application -> TestName -> Session () -> TestTree
 testWai a tn = singleTest tn . S a tn
 
+-- | Submit a 'HTTP.GET' request to the provided endpoint.
 get :: BS.ByteString -> Session SResponse
 get = request . buildRequest HTTP.GET . RequestPath
 
+-- | Submit a 'HTTP.POST' request to the given endpoint with the provided 
+-- 'LBS.ByteString' as the body content.
 post :: BS.ByteString -> LBS.ByteString -> Session SResponse
 post r = srequest . buildRequestWithBody HTTP.POST (RequestPath r)
 
+-- | Submit a 'HTTP.PUT' request to the given endpoint with the provided
+-- 'LBS.ByteString' as the body content.
 put :: BS.ByteString -> LBS.ByteString -> Session SResponse
 put r = srequest . buildRequestWithBody HTTP.PUT (RequestPath r)
 
+-- | An alternative helper function for checking the status code on a response
+-- that lets you use the functions from 'Network.HTTP.Types' as opposed to bare
+-- numbers.
 assertStatus' :: HTTP.Status -> SResponse -> Session ()
 assertStatus' c = assertStatus (HTTP.statusCode c)
