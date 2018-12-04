@@ -1,8 +1,9 @@
+-- | Types and functions for testing 'wai' endpoints using the 'tasty' testing framework.
+--
 module Test.Tasty.Wai
   (
     -- * Types
     Sess (..)
-  , RequestPath (..)
 
     -- * Creation
   , testWai
@@ -37,12 +38,8 @@ import           Test.Tasty.Runners   (formatMessage)
 import           Network.Wai          (Application, Request, requestMethod)
 import           Network.Wai.Test
 
+-- | Data structure for carrying around the info needed to build and run a test.
 data Sess = S Application TestName (Session ())
-
--- Although not exported, this newtype helps us keep our strings in line.
-newtype RequestPath = RequestPath
-  { unRequestPath :: BS.ByteString
-  }
 
 instance IsTest Sess where
   -- No options yet
@@ -65,16 +62,16 @@ instance IsTest Sess where
 -- | Create an empty 'Request' using the given HTTP Method and route.
 buildRequest
   :: StdMethod
-  -> RequestPath
+  -> BS.ByteString
   -> Request
-buildRequest mth rpath = flip setPath (unRequestPath rpath) $ defaultRequest
+buildRequest mth rpath = flip setPath rpath $ defaultRequest
   { requestMethod = HTTP.renderStdMethod mth
   }
 
 -- | As per 'buildRequest' but requires body content.
 buildRequestWithBody
   :: StdMethod
-  -> RequestPath
+  -> BS.ByteString
   -> LBS.ByteString
   -> SRequest
 buildRequestWithBody mth rpath =
@@ -100,17 +97,17 @@ testWai a tn = singleTest tn . S a tn
 
 -- | Submit a 'HTTP.GET' request to the provided endpoint.
 get :: BS.ByteString -> Session SResponse
-get = request . buildRequest HTTP.GET . RequestPath
+get = request . buildRequest HTTP.GET
 
--- | Submit a 'HTTP.POST' request to the given endpoint with the provided 
+-- | Submit a 'HTTP.POST' request to the given endpoint with the provided
 -- 'LBS.ByteString' as the body content.
 post :: BS.ByteString -> LBS.ByteString -> Session SResponse
-post r = srequest . buildRequestWithBody HTTP.POST (RequestPath r)
+post r = srequest . buildRequestWithBody HTTP.POST r
 
 -- | Submit a 'HTTP.PUT' request to the given endpoint with the provided
 -- 'LBS.ByteString' as the body content.
 put :: BS.ByteString -> LBS.ByteString -> Session SResponse
-put r = srequest . buildRequestWithBody HTTP.PUT (RequestPath r)
+put r = srequest . buildRequestWithBody HTTP.PUT r
 
 -- | An alternative helper function for checking the status code on a response
 -- that lets you use the functions from 'Network.HTTP.Types' as opposed to bare
