@@ -1,4 +1,4 @@
-<img src="http://i.imgur.com/0h9dFhl.png" width="300px"/>
+<img src="img/csiro_data61_logo_colour.png" width="300px"/>
 
 [![Build Status](https://travis-ci.org/qfpl/tasty-wai.svg?branch=master)](https://travis-ci.org/qfpl/tasty-wai)
 
