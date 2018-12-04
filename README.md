@@ -1,3 +1,7 @@
+<img src="http://i.imgur.com/0h9dFhl.png" width="300px"/>
+
+[![Build Status](https://travis-ci.org/qfpl/tasty-wai.svg?branch=master)](https://travis-ci.org/qfpl/tasty-wai)
+
 # `tasty-wai`
 
 This provides [`tasty`]( https://hackage.haskell.org/package/tasty) integration
