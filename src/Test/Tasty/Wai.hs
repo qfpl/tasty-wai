@@ -24,6 +24,7 @@ import qualified Control.Exception    as E
 
 import qualified Data.ByteString      as BS
 import qualified Data.ByteString.Lazy as LBS
+import           Data.Monoid          ((<>))
 
 import           Network.HTTP.Types   (StdMethod)
 import qualified Network.HTTP.Types   as HTTP
