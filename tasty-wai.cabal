@@ -16,6 +16,8 @@ category:            Testing,Web
 
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
+                   , README.md
+
 cabal-version:       >=1.10
 
 tested-with:         GHC == 7.10.3
