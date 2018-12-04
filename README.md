@@ -1,8 +1,13 @@
 # `tasty-wai`
 
-This provides [`tasty`]( https://hackage.haskell.org/package/tasty) integration for [`wai`]( https://hackage.haskell.org/package/wai) via the components provided by [`wai-extra`](https://hackage.haskell.org/package/wai-extra).
+This provides [`tasty`]( https://hackage.haskell.org/package/tasty) integration
+for [`wai`]( https://hackage.haskell.org/package/wai) via the components
+provided by [`wai-extra`](https://hackage.haskell.org/package/wai-extra).
 
-This is a simple package, it does not provide any resource management for anything that your `Application` may require. Test databases and the like are not handled. This package provides a nicer interface to running tests again the endpoints and interrogating their results.
+This is a simple package, it does not provide any resource management for
+anything that your `Application` may require. Test databases and the like are
+not handled. This package provides a nicer interface to running tests again the
+endpoints and interrogating their results.
 
 ## An example of usage
 
@@ -11,6 +16,11 @@ There is an example of usage in `test/Test.hs` and it is included here.
 Given this trivial `Application`:
 
 ```haskell
+import           Network.Wai        (Application)
+import qualified Network.Wai        as W
+
+import qualified Network.HTTP.Types as H
+
 testApp :: Application
 testApp rq cb = do
   let
@@ -58,11 +68,16 @@ testWai testApp "Will die!" $ do
 These can be grouped up and run as per the `tasty` `TestTree`:
 
 ```haskell
-testGroup "Tasty-Wai Tests"
+import           Test.Tasty         (defaultMain, testGroup)
+import           Test.Tasty.Wai     (assertBody, assertStatus, assertStatus',
+                                     get, post, testWai)
+
+main :: IO ()
+main = defaultMain $ testGroup "Tasty-Wai Tests"
 
   [ testWai testApp "Hello to World" $ do
       res <- get "hello"
-      assertBody "world!" res
+      assertBody "wrld!" res
 
   , testWai testApp "Echo to thee" $ do
       res <- post "echo" "thus"

@@ -4,19 +4,29 @@
 name:                tasty-wai
 version:             0.1.0.0
 synopsis:            Test 'wai' endpoints via Test.Tasty
--- description:
+description:         Helper functions and runners for testing wai endpoints using the Tasty testing infrastructure.
 license:             BSD3
 license-file:        LICENCE
-author:              Sean Chalmers
-maintainer:          sclhiannan@gmail.com
+author:              QFPL @ Data61
+maintainer:          sean.chalmers@data61.csiro.au
 
--- copyright:
+copyright:           Copyright (C) 2018 Commonwealth Scientific and Industrial Research Organisation (CSIRO)
 
 category:            Testing,Web
 
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
 cabal-version:       >=1.10
+
+tested-with:         GHC == 7.10.3
+                   , GHC == 8.0.2
+                   , GHC == 8.2.2
+                   , GHC == 8.4.1
+                   , GHC == 8.6.1
+
+source-repository head
+    type: git
+    location: https://github.com/qfpl/tasty-wai
 
 library
   exposed-modules:     Test.Tasty.Wai
