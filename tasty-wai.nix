@@ -3,7 +3,7 @@
 }:
 mkDerivation {
   pname = "tasty-wai";
-  version = "0.1.0.1";
+  version = "0.1.1.0";
   src = ./.;
   libraryHaskellDepends = [
     base bytestring http-types tasty wai wai-extra

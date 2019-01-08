@@ -27,7 +27,7 @@ import qualified Data.ByteString      as BS
 import qualified Data.ByteString.Lazy as LBS
 import           Data.Monoid          ((<>))
 
-import           Network.HTTP.Types   (StdMethod)
+import           Network.HTTP.Types   (RequestHeaders, StdMethod)
 import qualified Network.HTTP.Types   as HTTP
 
 import           Test.Tasty.Providers (IsTest (..), Progress (..), TestName,
@@ -35,7 +35,8 @@ import           Test.Tasty.Providers (IsTest (..), Progress (..), TestName,
                                        testPassed)
 import           Test.Tasty.Runners   (formatMessage)
 
-import           Network.Wai          (Application, Request, requestMethod)
+import           Network.Wai          (Application, Request, requestHeaders,
+                                       requestMethod)
 import           Network.Wai.Test
 
 -- | Data structure for carrying around the info needed to build and run a test.
@@ -76,6 +77,17 @@ buildRequestWithBody
   -> SRequest
 buildRequestWithBody mth rpath =
   SRequest (buildRequest mth rpath)
+
+-- | As per 'buildRequestWithBody' but allows for the setting of 'RequestHeaders'.
+buildRequestWithHeaders
+  :: StdMethod
+  -> BS.ByteString
+  -> LBS.ByteString
+  -> RequestHeaders
+  -> SRequest
+buildRequestWithHeaders mthd pth bdy hdrs =
+  rq { simpleRequest = (simpleRequest rq) { requestHeaders = hdrs } }
+  where rq = buildRequestWithBody mthd pth bdy
 
 -- | Run a test case against a 'Application'.
 --

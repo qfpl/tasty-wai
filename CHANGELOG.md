@@ -1,5 +1,9 @@
 # Revision history for tasty-wai
 
+## 0.1.1.0 -- 2019-01-09
+
+* Add `buildRequestWithHeaders` function.
+
 ## 0.1.0.1 -- 2018-12-04
 
 * Add README to the extra-source-files.
