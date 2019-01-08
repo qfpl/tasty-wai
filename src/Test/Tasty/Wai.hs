@@ -17,6 +17,7 @@ module Test.Tasty.Wai
     -- * Request Builders
   , buildRequest
   , buildRequestWithBody
+  , buildRequestWithHeaders
 
   , module Network.Wai.Test
   ) where
