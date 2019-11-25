@@ -1,4 +1,4 @@
-<img src="https://turnipbox.netlify.com/img/d61.svg" width="300px"/>
+![CSIRO's Data61 Logo](https://raw.githubusercontent.com/qfpl/assets/master/data61-transparent-bg.png)
 
 [![Build Status](https://travis-ci.org/qfpl/tasty-wai.svg?branch=master)](https://travis-ci.org/qfpl/tasty-wai)
 
