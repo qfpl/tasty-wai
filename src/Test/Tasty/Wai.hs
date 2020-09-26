@@ -31,6 +31,8 @@ import           Data.Monoid          ((<>))
 import           Network.HTTP.Types   (RequestHeaders, StdMethod)
 import qualified Network.HTTP.Types   as HTTP
 
+import           Test.HUnit.Lang      (HUnitFailure (HUnitFailure), formatFailureReason)
+
 import           Test.Tasty.Providers (IsTest (..), Progress (..), TestName,
                                        TestTree, singleTest, testFailed,
                                        testPassed)
@@ -58,7 +60,7 @@ instance IsTest Sess where
     -- 'Session a' isn't important for the test?
     E.try (runSession sess app) >>= either toFailure toPass
     where
-      toFailure (WaiTestFailure s) = testFailed <$> (formatMessage s)
+      toFailure (HUnitFailure _ s) = testFailed <$> (formatMessage (formatFailureReason s))
       toPass     _                 = pure (testPassed mempty)
 
 -- | Create an empty 'Request' using the given HTTP Method and route.
