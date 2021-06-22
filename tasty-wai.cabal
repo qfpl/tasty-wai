@@ -27,6 +27,7 @@ tested-with:         GHC == 7.10.3
                    , GHC == 8.6.5
                    , GHC == 8.8.3
                    , GHC == 8.10.1
+                   , GHC == 9.0.1
 
 source-repository head
     type: git
@@ -38,7 +39,7 @@ library
   -- other-modules:
   -- other-extensions:
 
-  build-depends:       base >= 4.8 && < 4.15
+  build-depends:       base >= 4.8 && < 4.16
                      , tasty >= 0.8 && < 1.5
                      , bytestring >= 0.10 && < 0.12
                      , wai == 3.2.*
@@ -60,7 +61,7 @@ test-suite tests
   hs-source-dirs:      test
   main-is:             Test.hs
 
-  build-depends:       base >= 4.8 && < 4.15
+  build-depends:       base >= 4.8 && < 4.16
                      , tasty >= 0.8 && < 1.5
                      , wai == 3.2.*
                      , http-types >= 0.9 && < 0.13
