@@ -10,6 +10,7 @@ module Test.Tasty.Wai
 
     -- * Helpers
   , get
+  , head
   , post
   , put
   , assertStatus'
@@ -23,6 +24,7 @@ module Test.Tasty.Wai
   ) where
 
 import qualified Control.Exception    as E
+import           Prelude              hiding (head)
 
 import qualified Data.ByteString      as BS
 import qualified Data.ByteString.Lazy as LBS
@@ -109,6 +111,10 @@ buildRequestWithHeaders mthd pth bdy hdrs =
 --
 testWai :: Application -> TestName -> Session () -> TestTree
 testWai a tn = singleTest tn . S a tn
+
+-- | Submit a 'HTTP.HEAD' request to the provided endpoint.
+head :: BS.ByteString -> Session SResponse
+head = request . buildRequest HTTP.HEAD
 
 -- | Submit a 'HTTP.GET' request to the provided endpoint.
 get :: BS.ByteString -> Session SResponse
