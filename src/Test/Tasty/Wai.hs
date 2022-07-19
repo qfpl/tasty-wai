@@ -12,6 +12,7 @@ module Test.Tasty.Wai
   , get
   , head
   , post
+  , postWithHeaders
   , put
   , assertStatus'
 
@@ -33,7 +34,8 @@ import           Data.Monoid          ((<>))
 import           Network.HTTP.Types   (RequestHeaders, StdMethod)
 import qualified Network.HTTP.Types   as HTTP
 
-import           Test.HUnit.Lang      (HUnitFailure (HUnitFailure), formatFailureReason)
+import           Test.HUnit.Lang      (HUnitFailure (HUnitFailure),
+                                       formatFailureReason)
 
 import           Test.Tasty.Providers (IsTest (..), Progress (..), TestName,
                                        TestTree, singleTest, testFailed,
@@ -45,7 +47,8 @@ import           Network.Wai          (Application, Request, requestHeaders,
 import           Network.Wai.Test
 
 -- | Data structure for carrying around the info needed to build and run a test.
-data Sess = S Application TestName (Session ())
+data Sess
+  = S Application TestName (Session ())
 
 instance IsTest Sess where
   -- No options yet
@@ -124,6 +127,9 @@ get = request . buildRequest HTTP.GET
 -- 'LBS.ByteString' as the body content.
 post :: BS.ByteString -> LBS.ByteString -> Session SResponse
 post r = srequest . buildRequestWithBody HTTP.POST r
+
+postWithHeaders :: BS.ByteString -> LBS.ByteString -> RequestHeaders -> Session SResponse
+postWithHeaders path body headers = srequest $ buildRequestWithHeaders HTTP.POST path body headers
 
 -- | Submit a 'HTTP.PUT' request to the given endpoint with the provided
 -- 'LBS.ByteString' as the body content.
