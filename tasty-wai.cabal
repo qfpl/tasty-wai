@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                tasty-wai
-version:             0.1.1.1
+version:             0.1.2.0
 synopsis:            Test 'wai' endpoints via Test.Tasty
 description:         Helper functions and runners for testing wai endpoints using the Tasty testing infrastructure.
 license:             BSD3

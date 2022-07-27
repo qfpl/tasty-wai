@@ -1,5 +1,9 @@
 # Revision history for tasty-wai
 
+## 0.1.2.0 -- 2022-07-27
+
+* Add `head` and `postWithHeaders` functions
+
 ## 0.1.1.1 -- 2020-09-24
 
 * Support wai-extra 3.1
