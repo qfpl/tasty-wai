@@ -10,7 +10,9 @@ module Test.Tasty.Wai
 
     -- * Helpers
   , get
+  , head
   , post
+  , postWithHeaders
   , put
   , assertStatus'
 
@@ -23,6 +25,7 @@ module Test.Tasty.Wai
   ) where
 
 import qualified Control.Exception    as E
+import           Prelude              hiding (head)
 
 import qualified Data.ByteString      as BS
 import qualified Data.ByteString.Lazy as LBS
@@ -31,7 +34,8 @@ import           Data.Monoid          ((<>))
 import           Network.HTTP.Types   (RequestHeaders, StdMethod)
 import qualified Network.HTTP.Types   as HTTP
 
-import           Test.HUnit.Lang      (HUnitFailure (HUnitFailure), formatFailureReason)
+import           Test.HUnit.Lang      (HUnitFailure (HUnitFailure),
+                                       formatFailureReason)
 
 import           Test.Tasty.Providers (IsTest (..), Progress (..), TestName,
                                        TestTree, singleTest, testFailed,
@@ -43,7 +47,8 @@ import           Network.Wai          (Application, Request, requestHeaders,
 import           Network.Wai.Test
 
 -- | Data structure for carrying around the info needed to build and run a test.
-data Sess = S Application TestName (Session ())
+data Sess
+  = S Application TestName (Session ())
 
 instance IsTest Sess where
   -- No options yet
@@ -110,6 +115,10 @@ buildRequestWithHeaders mthd pth bdy hdrs =
 testWai :: Application -> TestName -> Session () -> TestTree
 testWai a tn = singleTest tn . S a tn
 
+-- | Submit a 'HTTP.HEAD' request to the provided endpoint.
+head :: BS.ByteString -> Session SResponse
+head = request . buildRequest HTTP.HEAD
+
 -- | Submit a 'HTTP.GET' request to the provided endpoint.
 get :: BS.ByteString -> Session SResponse
 get = request . buildRequest HTTP.GET
@@ -118,6 +127,9 @@ get = request . buildRequest HTTP.GET
 -- 'LBS.ByteString' as the body content.
 post :: BS.ByteString -> LBS.ByteString -> Session SResponse
 post r = srequest . buildRequestWithBody HTTP.POST r
+
+postWithHeaders :: BS.ByteString -> LBS.ByteString -> RequestHeaders -> Session SResponse
+postWithHeaders path body headers = srequest $ buildRequestWithHeaders HTTP.POST path body headers
 
 -- | Submit a 'HTTP.PUT' request to the given endpoint with the provided
 -- 'LBS.ByteString' as the body content.
