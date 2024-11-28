@@ -7,7 +7,8 @@ module Test.Tasty.Wai
 
     -- * Creation
   , testWai
-
+  , testWai'
+  
     -- * Helpers
   , get
   , head
@@ -48,18 +49,19 @@ import           Network.Wai.Test
 
 -- | Data structure for carrying around the info needed to build and run a test.
 data Sess
-  = S Application TestName (Session ())
+  = S (IO Application) TestName (Session ())
 
 instance IsTest Sess where
   -- No options yet
   testOptions = mempty
 
-  run _ (S app tName sess) yieldProgress = do
+  run _ (S mkApp tName sess) yieldProgress = do
 
     -- We don't really have progress to report, so state that we're running a
     -- test but do nothing else.
     yieldProgress $ Progress ("Running " <> tName) 0
 
+    app <- mkApp
     -- The wai-extra testing uses `throwIO` to indicate a test failure and
     -- converts that error into a 'String'. The result of the individual
     -- 'Session a' isn't important for the test?
@@ -113,7 +115,25 @@ buildRequestWithHeaders mthd pth bdy hdrs =
 -- @
 --
 testWai :: Application -> TestName -> Session () -> TestTree
-testWai a tn = singleTest tn . S a tn
+testWai a tn = singleTest tn . S (pure a) tn
+
+-- | Run a test case using an 'IO Application'.
+--
+-- This module re-exports the functions from 'wai-extra' for constructing the
+-- 'Session' that is executed against a given endpoint.
+--
+-- A small test case may look like:
+--
+-- @
+-- import MyApp (mkApp)
+--
+-- testWai' mkApp "List Topics" $ do
+--       res <- get "fudge/view"
+--       assertStatus' HTTP.status200 res
+-- @
+--
+testWai' :: IO Application -> TestName -> Session () -> TestTree
+testWai' mkApp tn = singleTest tn . S mkApp tn
 
 -- | Submit a 'HTTP.HEAD' request to the provided endpoint.
 head :: BS.ByteString -> Session SResponse
